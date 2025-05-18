@@ -7,12 +7,13 @@ transaction-manager/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/homework/transactionmanager/
+│   │   │   ├── config/
+│   │   │   │   ├── CacheConfig.java
+│   │   │   │   ├── TransactionMetrics.java
 │   │   │   ├── controller/
 │   │   │   │   ├── TransactionController.java
 │   │   │   ├── dto/
 │   │   │   │   ├── ErrorResponse.java
-│   │   │   │   ├── TransactionRequest.java
-│   │   │   │   ├── TransactionResponse.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Transaction.java
 │   │   │   ├── enums/
@@ -60,8 +61,12 @@ The project will be presented in the following aspects sequentially
 + spring-boot-starter-web
 + spring-boot-starter-thymeleaf
 + spring-boot-starter-data-jpa
-+ h2
-+ micrometer-registry-prometheus
++ h2 (in memory database)
++ micrometer-registry-prometheus (monitor collect)
++ grafana (Chosen for visualization due to its)
++ caffeine (cache)
++ spring-boot-starter-cache (cache)
++ resilience4j-spring-boot2(rate limiting)
 ### Applications Layered Architecture
 
 | Layer | Responsibilities |

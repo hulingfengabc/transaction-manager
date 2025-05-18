@@ -9,20 +9,43 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface TransactionService {
-    // 创建新交易
+    /**
+     * create transaction
+     * @param transaction
+     * @return
+     * @throws DuplicateTransactionException
+     */
     Transaction createTransaction(Transaction transaction) throws DuplicateTransactionException;
 
+    /**
+     * transaction query with page
+     * @return
+     */
     Page<Transaction> getAllTransactions(Pageable pageable);
 
-    // 获取所有交易（带分页）
-    List<Transaction> getAllTransactions();
 
-    // 获取单个交易
+    /**
+     * query single transaction By id
+     * @param id
+     * @return
+     * @throws TransactionNotFoundException
+     */
     Transaction getTransactionById(Long id) throws TransactionNotFoundException;
 
-    // 更新交易
+    /**
+     * update transaction
+     * @param id
+     * @param transactionDetails
+     * @return
+     * @throws TransactionNotFoundException
+     * @throws DuplicateTransactionException
+     */
     Transaction updateTransaction(Long id, Transaction transactionDetails) throws TransactionNotFoundException, DuplicateTransactionException;
 
-    // 删除交易
+    /**
+     * delete transaction
+     * @param id
+     * @throws TransactionNotFoundException
+     */
     void deleteTransaction(Long id) throws TransactionNotFoundException;
 }

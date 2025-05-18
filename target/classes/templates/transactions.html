@@ -26,10 +26,13 @@
 <div class="container mt-4">
     <h1>Bank transaction management</h1>
 
+    <!-- 成功消息 -->
     <div th:if="${successMessage}" class="alert alert-success success-message" th:text="${successMessage}"></div>
 
+    <!-- 错误消息 -->
     <div th:if="${errorMessage}" class="alert alert-danger error-message" th:text="${errorMessage}"></div>
 
+    <!-- 添加交易按钮 -->
     <a th:href="@{/transactions/add}" class="btn btn-primary mb-3">Add Transaction</a>
 
     <div class="transaction-list">
@@ -60,8 +63,9 @@
 
         </table>
 
+        <!-- 如果没有交易记录 -->
         <div th:if="${transactions.content.empty}" class="alert alert-info">
-            Transaction records is empty
+            暂无交易记录
         </div>
 
         <div class="col-md-6" th:if="${!transactions.content.empty}">

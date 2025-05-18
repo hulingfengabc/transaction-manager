@@ -30,12 +30,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    @Cacheable("transactions")
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
-    }
-
-    @Override
     @Cacheable(value = "transactions", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<Transaction> getAllTransactions(Pageable pageable) {
         return transactionRepository.findAll(pageable);

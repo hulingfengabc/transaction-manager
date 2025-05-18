@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleAllExceptions(Exception ex, Model model) {
-        model.addAttribute("errorMessage", "发生错误: " + ex.getMessage());
+        model.addAttribute("errorMessage", "error: " + ex.getMessage());
         return "error/500";
     }
 }

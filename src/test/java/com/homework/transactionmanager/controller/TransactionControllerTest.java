@@ -1,68 +1,78 @@
 package com.homework.transactionmanager.controller;
 
-import com.homework.transactionmanager.TransactionManagerApplication;
-import com.homework.transactionmanager.config.TestConfig;
 import com.homework.transactionmanager.entity.Transaction;
 import com.homework.transactionmanager.enums.TransactionType;
+import com.homework.transactionmanager.exception.ResourceNotFoundException;
+import com.homework.transactionmanager.repository.TransactionRepository;
 import com.homework.transactionmanager.service.TransactionService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-@Import({TestConfig.class, TransactionManagerApplication.class})
-@AutoConfigureWebTestClient
+
+@SpringBootTest
 public class TransactionControllerTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+    @Mock
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private TransactionService transactionService;
 
-    private Transaction testTransaction;
+    @Test
+    void createTransaction_ValidData_Success() {
+        // 准备
+        Transaction dto = new Transaction();
+        dto.setDescription("TEST");
+        dto.setType(TransactionType.WITHDRAWAL.name());
+        dto.setDate(LocalDateTime.now());
+        dto.setAmount(new BigDecimal("10.00"));
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(new Transaction());
 
-    @BeforeEach
-    void setUp() {
-        testTransaction = new Transaction();
-        testTransaction.setType(TransactionType.DEPOSIT.name());
-        testTransaction.setAmount(new BigDecimal("100.00"));
-        testTransaction.setDate(LocalDateTime.now());
-        testTransaction.setDescription("Test");
+        // 执行
+        Transaction result = transactionService.createTransaction(dto);
+
+        // 验证
+        assertNotNull(result);
+        assertEquals(new BigDecimal("10.00"), result.getAmount());
+        verify(transactionRepository, times(1)).save(any());
     }
 
     @Test
-    void createTransaction() {
-        webTestClient.post().uri("/api/transactions/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(testTransaction)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody();
+    void getAllTransaction_NotFound_ThrowsException() {
+        // 准备
+        when(transactionRepository.findById(99L)).thenReturn(Optional.empty());
+
+        // 验证
+        assertThrows(ResourceNotFoundException.class,
+                () -> transactionService.getTransactionById(99L));
     }
 
     @Test
-    void updateTransaction_ShouldReturnUpdatedTransaction() throws Exception {
+    void updateTransaction_ValidData_Success() {
+        Transaction dto = new Transaction();
+        dto.setDescription("TEST");
+        dto.setType(TransactionType.WITHDRAWAL.name());
+        dto.setDate(LocalDateTime.now());
+        dto.setAmount(new BigDecimal("10.00"));
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(new Transaction());
 
-        webTestClient.post().uri("/api/transactions/edit/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(testTransaction)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.id").isEqualTo(testTransaction.getId())
-                .jsonPath("$.amount").isEqualTo(testTransaction.getAmount().doubleValue());
+        Transaction result = transactionService.updateTransaction(1L, dto);
+
+        assertNotNull(result);
+        assertEquals(new BigDecimal("10.00"), result.getAmount());
+        verify(transactionRepository, times(1)).save(any());
     }
+
 }

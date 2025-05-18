@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Transaction - Bank transaction management</title>
+    <title>编辑交易 - 银行交易管理系统</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <style>
         .form-container {
@@ -25,8 +25,10 @@
     <div class="form-container">
         <h2 class="mb-4">Edit Transaction</h2>
 
+        <!-- 错误消息 -->
         <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
+        <!-- 成功消息 -->
         <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 
         <form th:action="@{/transactions/edit/{id}(id=${transaction.id})}" th:object="${transaction}" method="post">

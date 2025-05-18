@@ -32,7 +32,7 @@ public class Transaction {
     @FutureOrPresent(message = "The date cannot be a past date.")
     private LocalDateTime date;
 
-    @Size(max = 255, message = "描述不能超过255个字符")
+    @Size(max = 255, message = "description cannot exceed 255 characters")
     private String description;
 
     // 辅助方法，用于判断两个交易是否重复
