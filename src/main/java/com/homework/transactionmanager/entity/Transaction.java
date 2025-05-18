@@ -29,7 +29,7 @@ public class Transaction {
     @Positive(message = "The amount must be a positive number.")
     private BigDecimal amount;
 
-    @FutureOrPresent(message = "The date cannot be a past date.")
+//    @FutureOrPresent(message = "The date cannot be a past date.")
     private LocalDateTime date;
 
     @Size(max = 255, message = "description cannot exceed 255 characters")
